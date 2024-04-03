@@ -6,6 +6,7 @@ import { Error } from 'mongoose';
 import { Error as MongooseError } from 'mongoose';
 import runMiddleware from '@/libs/runMiddleware';
 import Cors from 'cors';
+import { sendEmail } from './utility/emailService';
 
 interface ApiResponse {
   message?: string;
@@ -37,7 +38,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             ProgrammeName: req.body.ProgrammeName
           });
 
-          res.status(200).json({ message: 'Brochure Created' });
+
+          const htmlContent = `<div>
+                                  <b>Dear ${req.body.Name},</b>
+                                  <div style="padding:5px 15px;"></div>
+                                  <p>Thank you for reaching out to us. We appreciate your feedback!</p>
+                                  <p>We will get in touch soon.</p>
+                                  <div style="padding:15px 15px;"></div>
+                                  <div style="display:inline-block; padding:15px 0;">
+                                      <img src="https://astaracademy.in/img/logo.png" alt="Image" style="width:200px; height:auto;">
+                                  </div>
+                                </div>
+                              `;
+
+
+          const emailSent = await sendEmail({ recipient: req.body.Email, subject: 'Brochure Submission', text: htmlContent });
+
+          if (emailSent) {
+            res.status(200).json({ message: 'User Created Successfully' });
+          } else {
+            res.status(500).json({ error: 'Internal error' });
+          }
+
+          //res.status(200).json({ message: 'Brochure Created' });
         } catch (error: any) {
 
           if (error instanceof Error.ValidationError) {
