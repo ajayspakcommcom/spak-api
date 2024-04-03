@@ -30,12 +30,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         try {
 
           const result = await Admission.create({
-            FirstName: req.body.Name,
-            LastName: req.body.Name,
-            Email: req.body.Name,
-            Mobile: req.body.Name,
-            CountrtName: req.body.Name,
-            ProgrammeName: req.body.Name
+            FirstName: req.body.FirstName,
+            LastName: req.body.LastName,
+            Email: req.body.Email,
+            Mobile: req.body.Mobile,
+            CountrtName: req.body.CountrtName,
+            ProgrammeName: req.body.ProgrammeName
           });
 
           res.status(200).json({ message: 'Admission Created' });
