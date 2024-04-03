@@ -37,7 +37,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             QueryMessage: req.body.QueryMessage
           });
 
-          const emailSent = await sendEmail({ recipient: req.body.email, subject: 'Join The Tale', text: `<b>Name:</b> ${req.body.Name}, <br /> <b>Email:</b> ${req.body.Email}, <br /> <b>Mobile:</b> ${req.body.Mobile}` });
+          const htmlContent = `<div>
+                                  <b>Dear ${req.body.Name},</b>
+                                  <div style="padding:5px 15px;"></div>
+                                  <p>Thank you for reaching out to us. We appreciate your feedback!</p>
+                                  <p>We will get in touch soon.</p>
+                                  <div style="padding:15px 15px;"></div>
+                                  <div style="display:inline-block; padding:15px 0;">
+                                      <img src="https://astaracademy.in/img/logo.png" alt="Image" style="width:200px; height:auto;">
+                                  </div>
+                                </div>
+                              `;
+
+
+          const emailSent = await sendEmail({ recipient: req.body.Email, subject: 'Contact Submission', text: htmlContent });
 
           if (emailSent) {
             res.status(200).json({ message: 'User Created Successfully' });
@@ -45,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             res.status(500).json({ error: 'Internal error' });
           }
 
-          res.status(200).json({ message: 'Contact Created' });
+          //res.status(200).json({ message: 'Contact Created' });
         } catch (error: any) {
 
           if (error instanceof Error.ValidationError) {
