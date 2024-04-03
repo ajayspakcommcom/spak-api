@@ -30,10 +30,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         try {
 
           const result = await Contact.create({
-            Name: req.body.reason,
-            Email: req.body.reason,
-            Mobile: req.body.reason,
-            QueryMessage: req.body.reason
+            Name: req.body.Name,
+            Email: req.body.Email,
+            Mobile: req.body.Mobile,
+            QueryMessage: req.body.QueryMessage
           });
 
           res.status(200).json({ message: 'Contact Created' });
