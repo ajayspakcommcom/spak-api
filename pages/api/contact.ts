@@ -6,6 +6,7 @@ import { Error } from 'mongoose';
 import { Error as MongooseError } from 'mongoose';
 import runMiddleware from '@/libs/runMiddleware';
 import Cors from 'cors';
+import { sendEmail } from './utility/emailService';
 
 interface ApiResponse {
   message?: string;
@@ -35,6 +36,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             Mobile: req.body.Mobile,
             QueryMessage: req.body.QueryMessage
           });
+
+          const emailSent = await sendEmail({ recipient: req.body.email, subject: 'Join The Tale', text: `<b>Name:</b> ${req.body.Name}, <br /> <b>Email:</b> ${req.body.Email}, <br /> <b>Mobile:</b> ${req.body.Mobile}` });
+
+          if (emailSent) {
+            res.status(200).json({ message: 'User Created Successfully' });
+          } else {
+            res.status(500).json({ error: 'Internal error' });
+          }
 
           res.status(200).json({ message: 'Contact Created' });
         } catch (error: any) {
