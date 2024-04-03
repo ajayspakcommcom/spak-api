@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           const htmlContent = `<div>
                                   <b>Dear ${req.body.FirstName},</b>
                                   <div style="padding:5px 15px;"></div>
-                                  <p>Thank you for reaching out to us. We appreciate your feedback!</p>
+                                  <p>Thank you for reaching out to us.</p>
                                   <p>We will get in touch soon.</p>
                                   <div style="padding:15px 15px;"></div>
                                   <div style="display:inline-block; padding:15px 0;">
