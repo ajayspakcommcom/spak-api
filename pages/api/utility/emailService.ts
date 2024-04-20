@@ -12,13 +12,14 @@ const sendEmail = async ({ recipient, subject, text }: EmailData): Promise<boole
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'contactastaracademic@gmail.com',
-            pass: 'thbnzzqfdqlewhyj',
+            user: 'info@astaracademy.in',
+            pass: 'ujyapcmniuljhmqj'
         },
     });
 
     const mailOptions = {
-        from: 'contactastaracademic@gmail.com',
+        //from: 'info@astaracademy.in',
+        from: 'info@astaracademy.in',
         to: recipient,
         subject: subject,
         html: `${text}`,
