@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "aws-sdk": "^2.1608.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "formidable": "^3.5.1",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.3.0",
     "mongoose": "^8.1.0",
@@ -22,6 +24,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
+    "@types/formidable": "^3.4.5",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.14",
