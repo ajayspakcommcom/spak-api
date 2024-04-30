@@ -4,7 +4,10 @@ import runMiddleware from '@/libs/runMiddleware';
 import Cors from 'cors';
 import fs from 'fs';
 import s3 from './utility/aws-config';
+import { Test } from '@/models/Test';
 import { AStarCareerApplication } from '@/models/AStarCareerApplication';
+
+
 
 
 export const config = {
@@ -65,21 +68,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             const resp = await s3.upload(params).promise();
             console.log('resp', resp);
 
-            //careerData = { ...careerData, ImageUrl: 'test...' }
-            // console.log('careerData', careerData);
-
-
-
             try {
-                const result = await AStarCareerApplication.create({
-                    Name: 'Ramesh',
-                    Mobile: '8652248919',
-                    Position: 'top',
-                    ImageUrl: 'image'
-                });
-                console.log('result', result);
+                const result = await AStarCareerApplication.create({ ...careerData, ImageUrl: 'test' });
+                console.log('Data saved successfully:', result);
+                res.status(200).json({ message: 'Data saved successfully' });
             } catch (error) {
-                console.error('Error creating AStarCareerApplication:', error);
+                console.error('Error saving data:', error);
+                res.status(500).json({ error: 'Error saving data' });
             }
 
             res.status(200).json({ message: 'File uploaded successfully' });

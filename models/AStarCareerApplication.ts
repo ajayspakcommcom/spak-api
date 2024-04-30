@@ -3,19 +3,19 @@ import mongoose, { Schema, models } from 'mongoose';
 const aStarCareerApplicationSchema = new Schema({
   Name: {
     type: String,
-    required: true
+    default: null
   },
   Mobile: {
     type: String,
-    required: true
+    default: null
   },
   Position: {
     type: String,
-    required: true
+    default: null
   },
   ImageUrl: {
     type: String,
-    required: true
+    default: null
   },
   createdAt: {
     type: Date,

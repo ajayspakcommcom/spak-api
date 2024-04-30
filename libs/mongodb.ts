@@ -25,6 +25,10 @@ async function connectToMongoDB(): Promise<mongoose.Connection> {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
+      // serverSelectionTimeoutMS: 60000, // Increase timeout to 30 seconds
+      // socketTimeoutMS: 60000 // Increase socket timeout to 45 seconds
       // keepAlive: true,
       // useNewUrlParser: true,
       // useUnifiedTopology: true,
