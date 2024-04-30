@@ -11,4 +11,5 @@ AWS.config.update({
 // Create an instance of the S3 service
 const s3: S3 = new AWS.S3();
 
+
 export default s3;
