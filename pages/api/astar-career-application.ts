@@ -1,11 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { IncomingForm, File, Fields, Files } from 'formidable';
+import runMiddleware from '@/libs/runMiddleware';
+import Cors from 'cors';
 import fs from 'fs';
 import s3 from './utility/aws-config';
-import { AStarCareer } from '@/models/AStarCareer';
-
-
-
+import { AStarCareerApplication } from '@/models/AStarCareerApplication';
 
 
 export const config = {
@@ -14,15 +13,22 @@ export const config = {
     },
 };
 
+const cors = Cors({
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+});
+
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+
+    await runMiddleware(req, res, cors);
 
     const form = new IncomingForm();
 
     form.parse(req, async (err: Error, fields: Fields, files: Files) => {
 
-        console.log('fields', fields);
+        console.clear();
         console.log('files', files);
-
+        console.log('fields', fields);
 
         if (err) {
             console.error('Error parsing form:', err);
@@ -49,43 +55,32 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             ContentType: (file as any).mimetype //file.mimetype,
         };
 
-        console.log('params', params);
-        console.log('fields', fields);
-
-        // let taskData: any = {
-        //     user: fields.userId![0],
-        //     task: fields.taskId![0],
-        //     submitted: true
-        // };
-
-        // console.log('fields', fields);
-
+        let careerData: any = {
+            Name: fields.uname![0],
+            Mobile: fields.umobile![0],
+            Position: fields.uposition![0]
+        };
 
         try {
             const resp = await s3.upload(params).promise();
             console.log('resp', resp);
 
-
-            // const userTask = await UserTask.create(taskData);
-
-            // console.log('userTask', userTask);
+            //careerData = { ...careerData, ImageUrl: 'test...' }
+            // console.log('careerData', careerData);
 
 
-            // if (userTask) {
-            //     await Task.findOneAndUpdate(
-            //         {
-            //             _id: fields.taskId![0],
-            //             'assignedTo.user': fields.userId![0]
-            //         },
-            //         {
-            //             $set: {
-            //                 'assignedTo.$.isSubmitted': true,
-            //                 'assignedTo.$.createdDate': new Date()
-            //             }
-            //         },
-            //         { new: true }
-            //     );
-            // }
+
+            try {
+                const result = await AStarCareerApplication.create({
+                    Name: 'Ramesh',
+                    Mobile: '8652248919',
+                    Position: 'top',
+                    ImageUrl: 'image'
+                });
+                console.log('result', result);
+            } catch (error) {
+                console.error('Error creating AStarCareerApplication:', error);
+            }
 
             res.status(200).json({ message: 'File uploaded successfully' });
         } catch (error) {

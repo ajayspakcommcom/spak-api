@@ -1,11 +1,7 @@
 import mongoose, { Schema, models } from 'mongoose';
 
-const aStarCareerSchema = new Schema({
+const aStarCareerApplicationSchema = new Schema({
   Name: {
-    type: String,
-    required: true
-  },
-  Email: {
     type: String,
     required: true
   },
@@ -13,7 +9,11 @@ const aStarCareerSchema = new Schema({
     type: String,
     required: true
   },
-  QueryMessage: {
+  Position: {
+    type: String,
+    required: true
+  },
+  ImageUrl: {
     type: String,
     required: true
   },
@@ -23,4 +23,4 @@ const aStarCareerSchema = new Schema({
   }
 });
 
-export const AStarCareer = mongoose.models.AStarCareer || mongoose.model('AStarCareer', aStarCareerSchema);
+export const AStarCareerApplication = mongoose.models.AStarCareerApplication || mongoose.model('AStarCareerApplication', aStarCareerApplicationSchema);
