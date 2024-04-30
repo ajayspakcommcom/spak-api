@@ -1,10 +1,11 @@
 import AWS, { S3 } from 'aws-sdk';
 
+
 // Configure AWS SDK
 AWS.config.update({
-    accessKeyId: 'AKIA5QTMXGLUWJ7PNHZS',
-    secretAccessKey: 'nJDGPsF0A8ppw+/MwmaNujXoZZ2k2gLRXWG0fW8O',
-    region: 'ap-south-1', // e.g., 'us-east-1'
+    accessKeyId: process.env.AWS_ACCESS_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
 });
 
 // Create an instance of the S3 service
