@@ -13,10 +13,6 @@ const aStarCareerApplicationSchema = new Schema({
     type: String,
     default: null
   },
-  ImageUrl: {
-    type: String,
-    default: null
-  },
   createdAt: {
     type: Date,
     default: Date.now
