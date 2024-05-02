@@ -13,7 +13,7 @@ const sendEmail = async ({ recipient, subject, text }: EmailData): Promise<boole
         service: 'gmail',
         auth: {
             user: 'info@astaracademy.in',
-            pass: 'ujyapcmniuljhmqj'
+            pass: 'jyiliqqxpgxomujn'
         },
     });
 
