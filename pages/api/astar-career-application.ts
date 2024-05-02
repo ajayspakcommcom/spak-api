@@ -62,7 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                               `;
 
 
-                    const emailSent = await sendEmail({ recipient: 'ajay@spakcomm.com', subject: 'Career Application Submission', text: htmlContent });
+                    const emailSent = await sendEmail({ recipient: 'careers@astaracademy.com', subject: 'Career Application Submission', text: htmlContent });
 
                     if (emailSent) {
                         res.status(200).json({ message: 'User Created Successfully' });
