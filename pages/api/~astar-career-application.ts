@@ -3,7 +3,6 @@ import { IncomingForm, File, Fields, Files } from 'formidable';
 import runMiddleware from '@/libs/runMiddleware';
 import Cors from 'cors';
 import fs from 'fs';
-import s3 from './utility/aws-config';
 import { Test } from '@/models/Test';
 import { AStarCareerApplication } from '@/models/AStarCareerApplication';
 
