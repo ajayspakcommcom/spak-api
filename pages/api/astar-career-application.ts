@@ -6,6 +6,7 @@ import { Error } from 'mongoose';
 import { Error as MongooseError } from 'mongoose';
 import runMiddleware from '@/libs/runMiddleware';
 import Cors from 'cors';
+import { sendEmail } from './utility/emailService';
 
 
 interface ApiResponse {
@@ -39,7 +40,38 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                         Position: req.body.Designation
                     });
 
-                    res.status(200).json({ message: 'Application Created' });
+
+                    const htmlContent = `<div>
+                                  <b>Career Application Submission,</b>
+                                  <br /><br />
+
+                                  <b>Name : </b> <span>${req.body.Name}</span>
+                                  <br />
+
+                                 <b>Mobile : </b> <span>${req.body.Mobile}</span>
+                                 <br />
+
+                                 <b>Position : </b> <span>${req.body.Designation}</span>
+                                 <br />
+
+                                  
+                                  <div style="display:inline-block; padding:15px 0;">
+                                      <img src="https://astaracademy.in/img/logo.png" alt="Image" style="width:200px; height:auto;">
+                                  </div>
+                                </div>
+                              `;
+
+
+                    const emailSent = await sendEmail({ recipient: 'ajay@spakcomm.com', subject: 'Career Application Submission', text: htmlContent });
+
+                    if (emailSent) {
+                        res.status(200).json({ message: 'User Created Successfully' });
+                    } else {
+                        res.status(500).json({ error: 'Internal error' });
+                    }
+
+
+                    //res.status(200).json({ message: 'Application Created' });
                 } catch (error: any) {
 
                     if (error instanceof Error.ValidationError) {
