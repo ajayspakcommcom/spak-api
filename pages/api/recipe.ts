@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                               `;
 
 
-          const emailSent = await sendEmail({ recipient: req.body.Email, subject: 'Admission Submission', text: htmlContent });
+          const emailSent = await sendEmail({ recipient: req.body.Email, subject: 'A Start Workshops & Events', text: htmlContent });
 
           if (emailSent) {
             res.status(200).json({ message: 'User Created Successfully' });
