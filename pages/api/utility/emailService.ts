@@ -6,9 +6,11 @@ interface EmailData {
     recipient: string;
     subject: string;
     text: string;
+    isFile?: boolean;
+    files?: any
 }
 
-const sendEmail = async ({ recipient, subject, text }: EmailData): Promise<boolean> => {
+const sendEmail = async ({ recipient, subject, text, isFile = false, files }: EmailData): Promise<boolean> => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -17,7 +19,7 @@ const sendEmail = async ({ recipient, subject, text }: EmailData): Promise<boole
         },
     });
 
-    const mailOptions = {
+    const mailOptions: any = {
         //from: 'info@astaracademy.in',
         from: 'info@astaracademy.in',
         to: recipient,
@@ -28,6 +30,14 @@ const sendEmail = async ({ recipient, subject, text }: EmailData): Promise<boole
         //     //path: path.resolve(__dirname, 'dummy.pdf')
         // }]
     };
+
+    if (isFile && files && files.file && files.file.length > 0) {
+        const file = files.file[0]; // Assuming there's only one file
+        mailOptions.attachments = [{
+            filename: file.originalFilename,
+            path: file.filepath
+        }];
+    }
 
     try {
         const info = await transporter.sendMail(mailOptions);

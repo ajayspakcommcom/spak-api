@@ -1,11 +1,20 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import connectToMongoDB from '@/libs/mongodb';
-import { Test } from '@/models/Test';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { Error } from 'mongoose';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { IncomingForm, File, Fields, Files } from 'formidable';
+import { AStarCareerApplication } from '@/models/AStarCareerApplication';
 import { Error as MongooseError } from 'mongoose';
+import { Error } from 'mongoose';
+import fs from 'fs';
+import { sendEmail } from './utility/emailService';
+import connectToMongoDB from '@/libs/mongodb';
 import runMiddleware from '@/libs/runMiddleware';
 import Cors from 'cors';
+
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 interface ApiResponse {
   message?: string;
@@ -18,24 +27,66 @@ const cors = Cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 });
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   await connectToMongoDB();
   await runMiddleware(req, res, cors);
 
   if (req.method === 'POST') {
-
-    switch (req.body.type) {
+    switch (req.headers.type) {
       case 'CREATE':
         try {
 
-          const result = await Test.create({ reason: req.body.reason });
+          const form = new IncomingForm();
+          form.parse(req, async (err: Error, fields: Fields, files: Files) => {
 
-          console.log('Result : ', result);
+            if (err) {
+              console.error('Error parsing form:', err);
+              res.status(500).json({ error: 'Error parsing form' });
+              return;
+            }
 
-          res.status(200).json({ message: 'Test Created' });
+            // Check if there are any files uploaded
+            if (!files || !files.file) {
+              res.status(400).json({ error: 'No file uploaded' });
+              return;
+            }
+
+            // Ensure files.file is an array, and select the first file if it exists
+            const file = Array.isArray(files.file) ? files.file[0] : files.file;
+            const htmlContent = `<div>
+                                  <b>Career Application Submission,</b>
+                                  <br /><br />
+
+                                  <b>Name : </b> <span>${fields['Name']}</span>
+                                  <br />
+
+                                 <b>Mobile : </b> <span>${fields['Mobile']}</span>
+                                 <br />
+
+                                 <b>Position : </b> <span>${fields['Designation']}</span>
+                                 <br />
+
+                                  <div style="display:inline-block; padding:15px 0;">
+                                      <img src="https://astaracademy.in/img/logo.png" alt="Image" style="width:200px; height:auto;">
+                                  </div>
+                                </div>
+                              `;
+
+            console.clear();
+
+            const emailSent = await sendEmail({ recipient: 'ajay@spakcomm.com', subject: 'Career Application Submission', text: htmlContent, isFile: true, files: files });
+
+            if (emailSent) {
+              res.status(200).json({ message: 'User Created Successfully' });
+            } else {
+              res.status(500).json({ error: 'Internal error' });
+            }
+            res.status(200).json({ message: 'File uploaded successfully' });
+          });
+
         } catch (error: any) {
-
           if (error instanceof Error.ValidationError) {
             return res.status(400).json({ error: `Validation Error`, errorDetail: error.message });
           }
@@ -50,10 +101,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
           res.status(500).json({ error: 'Internal Error', errorDetail: error });
         }
+
         break;
       case 'LIST':
         try {
-          const dataList = await Test.find({}).exec();
+          const dataList = await AStarCareerApplication.find({}).exec();
           res.status(200).json({ data: dataList });
         } catch (error: any) {
 
@@ -64,8 +116,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
         break;
     }
-
   }
 
-}
 
+
+};
