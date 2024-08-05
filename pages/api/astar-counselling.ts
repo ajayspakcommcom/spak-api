@@ -15,6 +15,7 @@ interface ApiResponse {
   data?: any;
 }
 
+//updated
 const cors = Cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 });
