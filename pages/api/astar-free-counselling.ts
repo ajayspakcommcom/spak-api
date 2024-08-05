@@ -74,7 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                                 </div>
                               `;
 
-          const counsellingMail = await sendEmail({ recipient: 'ajay@spakcomm.com', subject: 'Free Counseling', text: ashishContent });
+          const counsellingMail = await sendEmail({ recipient: 'ashish@flyinghigh.co.in', subject: 'Free Counseling', text: ashishContent });
 
           if (counsellingMail) {
             res.status(200).json({ message: 'Mail sent' });
