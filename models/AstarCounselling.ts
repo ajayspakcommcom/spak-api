@@ -31,4 +31,4 @@ const counsellingSchema = new Schema({
   }
 });
 
-export const Counselling = mongoose.models.Admission || mongoose.model('Counselling', counsellingSchema);
+export const Counselling = mongoose.models.Counselling || mongoose.model('Counselling', counsellingSchema);
